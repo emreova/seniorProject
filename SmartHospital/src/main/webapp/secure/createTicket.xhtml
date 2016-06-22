@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Hospital Management System</title>
+</h:head>
+
+<header>
+
+<img src="../images/newbanner.png"></img>
+	
+
+</header>
+<h:body>
+	<body background="../images/bgcol.png" text="black">
+
+
+
+	<h:form>
+
+		<p:growl id="messages" />
+
+		<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+
+
+		<table bgcolor="white"  width="1221px"><tr><td>
+		<h:panelGrid columns="2" cellpadding="5" border="1" style="width: 100%">
+		
+		<p:outputLabel for="subject" value="Name - Surname :" />   
+            <p:inputText id="subject" value="#{createTicketBean.subject}" required="true" requiredMessage="Subject is required."  /> 
+            
+            
+			<p:outputLabel for="lab" value="Department:" />
+			<p:selectOneMenu id="lab"
+				value="#{createTicketBean.labName}" style="width:250px"
+				update=""  required="true" requiredMessage="Lab name is required." >
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Department" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.labNames}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel for="type" value="Operation:" />
+			<p:selectOneMenu id="type"
+				value="#{createTicketBean.typeName}" style="width:250px"
+				update=""  required="true" requiredMessage="Type is required." >
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Operation" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.typeNames}" />
+			</p:selectOneMenu>
+
+
+		<p:outputLabel for="prio" value="Doctor:" />
+			<p:selectOneMenu id="prio"
+				value="#{createTicketBean.prioName}" style="width:250px"
+				update="" required="true" requiredMessage="Priority is required." >
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Doctor" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.prioNames}" />
+			</p:selectOneMenu>
+
+			
+   
+            <p:outputLabel value="Date :" for="esc_prime" />
+        <p:autoComplete id="esc_prime" value="#{createTicketBean.esc_prime}" completeMethod="#{autoCompleteView.completeTheme}"
+                        var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" converter="themeConverter" forceSelection="true" />
+
+		
+		<p:outputLabel for="desc" value="Description:"/>
+     	   <p:inputTextarea id="desc" rows="6" cols="35" value="#{createTicketBean.description}" required="true" requiredMessage="Description is required." />
+
+			<p:growl id="growl" life="2000" />
+
+			<p:growl>
+			
+			<p:commandButton value="Create"  update="growl" actionListener="#{createTicketBean.createTicket}" onclick="PF('dlg3').show();"  styleClass="ui-priority-primary" /> 
+			 
+			 <p:commandButton type="reset" value="Clear" />
+			 
+			 <p:dialog header="Appointment Info." widgetVar="dlg3" showEffect="explode" hideEffect="bounce" height="100">
+    <h:outputText value="Your appointment is created successfully. Confirmation mail is sent to admin and you. " />
+    	<img src="../images/success_icon.png"></img>
+</p:dialog>
+			</p:growl>
+		
+		
+		</h:panelGrid>
+		</td></tr>
+	</table>	
+
+	
+
+
+	</h:form>
+	
+	
+</body>
+</h:body>
+</html>

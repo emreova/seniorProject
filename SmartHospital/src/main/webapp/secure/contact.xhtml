@@ -1,0 +1,26 @@
+
+
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>JSF Mail Gönderme</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputText value="Görüşünüz:"/>
+                <h:inputTextarea value="#{mailBean.gorus}"/>
+                <h:outputText value="Adınız Soyadınız:"/>
+                <h:inputText value="#{mailBean.ad}"/>
+                <h:outputText value="Mail Adresiniz:"/>
+                <h:inputText value="#{mailBean.mailAdresi}"/>
+               
+               
+                <h:commandButton actionListener="#{mailBean.mailAt}" value="GÖNDER" action="gonderildi.xhtml?faces-redirect=true"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>

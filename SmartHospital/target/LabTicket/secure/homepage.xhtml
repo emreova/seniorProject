@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Netas Lab Ticket Tool</title>
+
+</h:head>
+
+<header>
+
+	<img src="../images/sonbannerr.png"></img>
+
+
+</header>
+
+
+<h:body>
+
+	<body background="../images/backgroundlast.png">
+		<h:form>
+			<p:growl id="messages" />
+
+
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+					<p:menuitem value="Priority Operation" url="/secure/prio.html#" />
+					<p:separator />
+					<p:menuitem value="Status Operation" url="/secure/status.html#" />
+					<p:separator />
+					<p:menuitem value="Type Operation" url="/secure/type.html#" />
+				</p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="" />
+				<p:menuitem value="Create" style="margin-left:430px ;color:#1199A3;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+			<p:growl id="msgs" showDetail="true" />
+
+
+			<p:accordionPanel multiple="true">
+
+				<p:tab title="All Tickets">
+
+					<h:form>
+						<p:dataTable var="ticket" value="#{homePageBean.allTickets}"
+							widgetVar="ticketsTable"
+							emptyMessage="No Tickets found with given criteria"
+							filteredValue="#{homePageBean.filteredTickets}">
+
+							<f:facet name="header">
+								<div align="right">
+									<p:outputPanel>
+										<h:outputText value="Search all fields:" />
+										<p:inputText id="globalFilter"
+											onkeyup="PF('ticketsTable').filter()" style="width:150px"
+											placeholder="Enter keyword" />
+									</p:outputPanel>
+								</div>
+							</f:facet>
+
+							<p:column filterBy="#{ticket.id}" headerText="Case ID"
+								filterMatchMode="contains">
+
+
+								<p:commandButton type="button" value="#{ticket.id}" />
+							</p:column>
+
+
+							<p:column filterBy="#{ticket.lab}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Lab Name"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.labNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.lab}" />
+							</p:column>
+
+							<p:column filterBy="#{ticket.type}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Type Name"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.typeNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.type}" />
+							</p:column>
+
+
+							<p:column filterBy="#{ticket.priority}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Prio Name"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.prioNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.priority}" />
+							</p:column>
+
+							<p:column filterBy="#{ticket.subject}" headerText="Subject"
+								filterMatchMode="contains">
+								<h:outputText value="#{ticket.subject}" />
+							</p:column>
+
+							<p:column filterBy="#{ticket.assign}" headerText="Assignee"
+								filterMatchMode="contains">
+								<h:outputText value="#{ticket.assign}" />
+							</p:column>
+
+							<p:column filterBy="#{ticket.status}" headerText="Prio Name"
+								filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Status Names"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.statusNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.status}" />
+							</p:column>
+
+							<p:column headerText="Create Date">
+								<h:outputText value="#{ticket.crdate}" />
+							</p:column>
+
+							<p:column filterBy="#{ticket.reporter}" headerText="Reporter"
+								filterMatchMode="contains">
+								<h:outputText value="#{ticket.reporter}" />
+							</p:column>
+
+							<p:column headerText="Forecast Date">
+								<h:outputText value="#{ticket.frdate}" />
+							</p:column>
+
+							<p:column headerText="Close Date">
+								<h:outputText value="#{ticket.frdate}" />
+							</p:column>
+
+
+							<f:facet name="footer">
+								<div align="left">Total cases:
+									#{fn:length(homePageBean.allTickets)}</div>
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+
+				<p:tab title="My Tickets">
+					<p:dataTable var="ticket" value="#{homePageBean.myTickets}">
+
+						<f:facet name="header">
+        	   My Tickets		
+       			 </f:facet>
+						<p:column headerText="Case ID">
+							<h:outputText value="#{ticket.id}" />
+						</p:column>
+
+						<p:column headerText="Lab">
+							<a href="http://localhost:8080/LabTicket/secure/ticket.html#"><h:outputText
+									value="#{ticket.lab}" /></a>
+						</p:column>
+
+						<p:column headerText="Type">
+							<h:outputText value="#{ticket.type}" />
+						</p:column>
+
+						<p:column headerText="Priority">
+							<h:outputText value="#{ticket.priority}" />
+						</p:column>
+
+						<p:column headerText="Subject">
+							<h:outputText value="#{ticket.subject}" />
+						</p:column>
+
+						<p:column headerText="Assignee">
+							<h:outputText value="#{ticket.assign}" />
+						</p:column>
+
+						<p:column headerText="Status">
+							<h:outputText value="#{ticket.status}" />
+						</p:column>
+
+						<p:column headerText="Create Date">
+							<h:outputText value="#{ticket.crdate}" />
+						</p:column>
+
+						<p:column headerText="Reporter">
+							<h:outputText value="#{ticket.reporter}" />
+						</p:column>
+
+						<p:column headerText="Forecast Date">
+							<h:outputText value="#{ticket.frdate}" />
+						</p:column>
+
+						<p:column headerText="Close Date">
+							<h:outputText value="#{ticket.frdate}" />
+						</p:column>
+
+
+					</p:dataTable>
+				</p:tab>
+
+			</p:accordionPanel>
+
+			<br>
+			<footer align="center">
+				<p style="color: white">
+					<br>© Copyright 2015</br>
+				</p>
+			</footer>
+			</br>
+
+		</h:form>
+
+
+
+	</body>
+</h:body>
+
+
+</html>

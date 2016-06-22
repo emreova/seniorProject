@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Hospital Management System</title>
+</h:head>
+
+<header>
+
+<img src="../images/newbanner.png"></img>
+	
+
+</header>
+<h:body>
+	<body background="../images/bgcol.png">
+
+
+		<h:form>
+		
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+
+    <p:growl id="messages" showDetail="true" />
+ 
+    <h:panelGrid columnClasses="value">
+
+        <p:schedule id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule" timeZone="GMT+2">
+ 
+            <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+            <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+            <p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" update="messages" />
+            <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update="messages" />
+ 
+        </p:schedule>
+ 
+      
+    </h:panelGrid>
+ 
+    <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+        <h:panelGrid id="eventDetails" columns="2">
+            <p:outputLabel for="title" value="Titles:" />
+            <p:inputText id="title" value="#{scheduleView.event.title}" required="true" />
+ 
+            <p:outputLabel for="from" value="From:" />
+            <p:calendar id="from" value="#{scheduleView.event.startDate}" timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm"/>
+ 
+            <p:outputLabel for="to" value="To:" />
+            <p:calendar id="to" value="#{scheduleView.event.endDate}" timeZone="GMT+2" pattern="dd/MM/yyyy HH:mm"/>
+ 
+            <p:outputLabel for="allDay" value="All Day:" />
+            <h:selectBooleanCheckbox id="allDay" value="#{scheduleView.event.allDay}" />
+ 
+            <p:commandButton type="reset" value="Reset" />
+            <p:commandButton id="addButton" value="Save" actionListener="#{scheduleView.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+        </h:panelGrid>
+    </p:dialog>    
+</h:form>
+ 
+<script type="text/javascript">
+    PrimeFaces.locales['tr'] = {
+        closeText: 'kapat',
+        prevText: 'geri',
+        nextText: 'ileri',
+        currentText: 'bugün',
+        monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
+            'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+        monthNamesShort: ['Oca','Şub','Mar','Nis','May','Haz',
+            'Tem','Ağu','Eyl','Eki','Kas','Ara'],
+        dayNames: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+        dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+        dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
+        weekHeader: 'Hf',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        month: 'Ay',
+        week: 'Hafta',
+        day: 'Gün',
+        allDayText : 'Tüm Gün'
+    };
+</script>
+<style type="text/css">
+    .value {
+        width: 1000px;
+    }
+</style>
+
+
+	</body>
+</h:body>
+</html>

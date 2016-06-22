@@ -1,0 +1,78 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+	<security:http auto-config="false" use-expressions="true">
+		<security:intercept-url pattern="/secure/**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/login.html"
+			access="permitAll" />
+		<security:form-login login-page="/login.html"
+			login-processing-url="/j_spring_security_check" default-target-url="/secure/homepage.html"
+			authentication-failure-url="/login.html?login_error=1" />
+		<security:logout logout-url="/j_spring_security_logout"
+			delete-cookies="JSESSIONID" logout-success-url="/login.html" />
+	</security:http>
+
+	<bean id="contextSource"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<constructor-arg value="ldap://217.78.111.42" />
+		<property name="userDn"
+			value="CN=Ismail KAYA,CN=Users,DC=netas,DC=lab,DC=nortel,DC=com" />
+		<property name="password" value="Nowitzki.41" />
+	</bean>
+
+	<bean id="userSearch"
+		class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+		<!-- searchBase, searchFilter, contextSource -->
+		<constructor-arg index="0"
+			value="CN=Users,DC=netas,DC=lab,DC=nortel,DC=com" />
+		<constructor-arg index="1" value="sAMAccountName={0}" />
+		<constructor-arg index="2" ref="contextSource" />
+	</bean>
+
+	<bean id="ldapAuthProvider"
+		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+		<constructor-arg>
+			<bean
+				class="org.springframework.security.ldap.authentication.BindAuthenticator">
+				<constructor-arg ref="contextSource" />
+				<property name="userSearch">
+					<ref bean="userSearch" />
+				</property>
+			</bean>
+		</constructor-arg>
+		<constructor-arg>
+			<bean
+				class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+				<constructor-arg ref="contextSource" />
+				<constructor-arg value="" />
+				<property name="rolePrefix" value="ROLE_" />
+				<property name="searchSubtree" value="true" />
+				<property name="convertToUpperCase" value="true" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<security:authentication-manager alias="authenticationManager">
+
+		<security:ldap-authentication-provider
+			server-ref="contextSource" user-search-filter="sAMAccountName={0}"
+			user-search-base="CN=Users,DC=netas,DC=lab,DC=nortel,DC=com"
+			group-search-filter="sAMAccountName={0}" group-search-base="CN=Users,DC=netas,DC=lab,DC=nortel,DC=com" />
+
+		<security:authentication-provider>
+			<security:password-encoder hash="md5" />
+			<security:user-service>
+				<security:user name="Admin" password="21232f297a57a5a743894a0e4a801fc3"
+					authorities="ROLE_ADMIN" />
+			</security:user-service>
+		</security:authentication-provider>
+
+	</security:authentication-manager>
+</beans>

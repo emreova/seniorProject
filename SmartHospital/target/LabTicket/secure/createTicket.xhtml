@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Netas Lab Ticket Tool</title>
+</h:head>
+
+<header>
+
+	<img src="../images/sonbannerr.png"></img>
+	
+
+</header>
+<h:body>
+	<body background="../images/backgroundlast.png" text="black">
+
+
+
+	<h:form>
+
+		<p:growl id="messages" />
+
+		<p:menubar>
+			<p:menuitem value="Home" style="margin-right:30px"
+				url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Priority Operation" url="/secure/prio.html#" />
+            <p:separator />
+            <p:menuitem value="Status Operation" url="/secure/status.html#" />
+            <p:separator />
+            <p:menuitem value="Type Operation" url="/secure/type.html#" />
+        </p:submenu>
+			<p:menuitem value="Timesheet" style="margin-right:30px" url="" />
+			<p:menuitem value="Create" style="margin-left:430px; color:#1199A3;" url="/secure/createTicket.html" icon="ui-icon-plus"  />
+			
+	
+		
+
+			<f:facet name="options">
+		
+				<p:inputText style="margin-right:10px" placeholder="Search" />
+				<p:commandButton type="button" value="Logout"  onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')" icon="ui-icon-extlink" />
+			</f:facet>
+		</p:menubar>
+
+		<table align="center" bgcolor="white" ><tr><td>
+		<h:panelGrid columns="2" cellpadding="5" border="1">
+			<p:outputLabel for="lab" value="Lab:" />
+			<p:selectOneMenu id="lab"
+				value="#{createTicketBean.labName}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Lab" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.labNames}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel for="type" value="Type:" />
+			<p:selectOneMenu id="type"
+				value="#{createTicketBean.typeName}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Type" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.typeNames}" />
+			</p:selectOneMenu>
+
+
+		<p:outputLabel for="prio" value="Priority:" />
+			<p:selectOneMenu id="prio"
+				value="#{createTicketBean.prioName}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Priority" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.prioNames}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel for="subject" value="Subject :" />   
+            <p:inputText id="subject" value="#{createTicketBean.subject}" required="true" /> 
+
+
+			<p:outputLabel for="desc" value="Description"/>
+     	   <p:inputTextarea id="desc" value="#{createTicketBean.description}" required="true"/>
+
+
+			<p:outputLabel for="esc_prime" value="Escalation Prime :"  />   
+            <p:inputText id="esc_prime" value="#{createTicketBean.esc_prime}" required="true" /> 
+
+
+
+			<p:growl id="growl" life="2000" />
+			<p:commandButton value="Create"  update="growl" actionListener="#{createTicketBean.createTicket}" styleClass="ui-priority-primary" />
+
+			
+			
+		</h:panelGrid>
+		</td></tr>
+	</table>	
+
+	
+
+
+	</h:form>
+</body>
+</h:body>
+</html>

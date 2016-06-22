@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Hospital Management System</title>
+</h:head>
+
+<header>
+
+<img src="../images/newbanner.png"></img>
+	
+
+</header>
+<h:body>
+	<body background="../images/bgcol.png">
+
+
+		<h:form prependId="false">
+			<p:growl id="messages" />
+
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+
+			<p:growl id="msgs" showDetail="true" />
+
+			<h:form>
+				<table>
+					<tr>
+						<td><p:dataTable var="prio"  value="#{prioBean.prioNames}">
+								<f:facet name="header">
+        	   Doctor	Operation
+       			 </f:facet>
+								<p:column headerText="Name" sortBy="#{prio}">
+									<h:outputText value="#{prio}" />
+								</p:column>
+					
+
+
+								<p:column headerText="">
+									<p:commandButton id="showDialogButton" type="button" actionListener="#{prioBean.handleOldPrioName(prio)}"
+										value="Update" onclick="PF('dlg2').show()" />
+								</p:column>
+
+
+								<p:column headerText="">
+									<p:commandButton value="Delete"
+										actionListener="#{prioBean.handlePrioDelete(prio)}" />
+								</p:column>
+								
+							</p:dataTable></td>
+					</tr>
+					<tr><td>
+					<p:dataTable var="priotw" value="emre">
+						<p:column>
+								
+								</p:column>
+								
+								<p:column headerText="">
+								
+								</p:column>
+
+
+								<p:column headerText="">
+							<p:commandButton id="showDialogButton" type="button" actionListener="#{prioBean.handlePrioAdd}"
+									value="Add New Doctor" onclick="PF('dlg').show()" />
+		
+								</p:column>
+					
+					</p:dataTable>
+					
+					</td></tr>
+				</table>
+	
+							
+			<p:dialog header="Enter a new doctor information" widgetVar="dlg"
+					appendToBody="true" resizable="false">
+					<h:form id="form">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px">
+							<h:outputLabel for="insertname" value="Doctor Name:" />
+							<p:inputText id="insertname" value="#{prioBean.insertname}" />
+						</h:panelGrid>
+
+						<p:commandButton value="Add" actionListener="#{prioBean.handlePrioAdd}" oncomplete="PF('dlg').hide();" />
+
+					</h:form>
+				</p:dialog>
+				
+					<p:dialog header="Enter a new name" widgetVar="dlg2"
+					appendToBody="true" resizable="false">
+					<h:form id="form2">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px">
+							<h:outputLabel for="newName" value="New name:" />
+							<p:inputText id="newName" value="#{prioBean.newPrioName}" />
+						</h:panelGrid>
+
+						<p:commandButton value="Add" actionListener="#{prioBean.handlePrioUpdate}" oncomplete="PF('dlg').hide();" />
+
+					</h:form>
+				</p:dialog>
+			
+
+				<p:outputPanel id="display" style="display:block;margin-top:10px;">
+					<h:outputText id="name" value="Hello #{backingBean.firstName}"
+						rendered="#{not empty backingBean.firstName}" />
+				</p:outputPanel>
+				
+				<p:growl id="msgs" showDetail="true" />
+ 			
+ 
+ 
+   
+			</h:form>
+
+
+		</h:form>
+
+
+	</body>
+</h:body>
+</html>

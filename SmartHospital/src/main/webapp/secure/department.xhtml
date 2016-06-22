@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Hospital Automation Project</title>
+</h:head>
+
+<header>
+
+<img src="../images/newbanner.png"></img>
+	
+
+</header>
+<h:body>
+	<body background="../images/bgcol.png">
+
+
+	<h:form>
+		<p:growl id="messages" />
+
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+		<p:growl id="msgs" showDetail="true" />
+		
+			<table><tr><td>
+				<p:dataTable var="car" value="#{carBean.cars}">
+				
+				  <f:facet name="header">
+        	   Department Operation
+       			 </f:facet>
+       			 
+					
+					<p:column headerText="Name">
+						<h:outputText value="#{car.color}" />
+					</p:column>
+					
+						<p:column headerText="">
+									<p:commandButton id="showDialogButton" type="button" 
+										value="Update" onclick="PF('dlg').show()" />
+								</p:column>
+
+					
+					<p:column headerText="">
+				<p:commandButton  value="Delete" actionListener="#{typeBean.handleTypeDelete(type)}" url="/secure/homepage.html"/>
+					</p:column>
+				
+				</p:dataTable>
+				</td>
+				</tr>
+				
+					<tr><td>
+					<p:dataTable var="typetw" value="emre">
+						<p:column>
+								
+								</p:column>
+								
+								<p:column headerText="">
+								
+								</p:column>
+
+
+								<p:column headerText="">
+						<p:commandButton id="showDialogButton" type="button" actionListener="#{typeBean.handleTypeAdd}"
+									value="Add New Type" onclick="PF('dlg2').show()" />
+		
+								</p:column>
+					
+					</p:dataTable>
+					
+					</td></tr>
+		</table>
+		
+		<table align="center" width="648px">
+		<tr><td style="text-align:right">
+	
+		</td></tr>
+		</table>
+		
+		<p:dialog header="Enter a new value to insert" widgetVar="dlg2"
+					appendToBody="true" resizable="false">
+					<h:form id="form2">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px">
+							<h:outputLabel for="insertname" value="New Type Name:" />
+							<p:inputText id="insertname" value="#{typeBean.insertname}" />
+						</h:panelGrid>
+
+						<p:commandButton value="Add" actionListener="#{typeBean.handleTypeAdd}" oncomplete="PF('dlg').hide();" />
+
+					</h:form>
+				</p:dialog>
+		
+		<p:dialog header="Enter new name" widgetVar="dlg"
+					appendToBody="true" resizable="false">
+					<h:form id="form">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px">
+							<h:outputLabel for="insertname" value="New name:" />
+							<p:inputText id="insertname" value="#{typeBean.insertname}" />
+						</h:panelGrid>
+
+						<p:commandButton value="Update" oncomplete="PF('dlg').hide();" />
+						
+					</h:form>
+				</p:dialog>
+				
+
+		
+
+	</h:form>
+	
+	
+
+</body>
+</h:body>
+</html>

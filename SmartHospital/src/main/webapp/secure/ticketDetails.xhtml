@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Hospital Management Project</title>
+</h:head>
+<header>
+ <style type="text/css">
+               input.disabled{
+          color:red;
+          border:0px;
+          background-color:transparent;
+     }
+     
+      .allTab {
+  background: #46b9b9;
+
+  color: white;
+   
+}
+
+
+        </style>
+
+	
+
+</header>
+<h:body>
+<img src="../images/newbanner.png"></img>
+	<body background="../images/bgcol.png" text="white">
+
+
+
+	<h:form id="emre">
+
+		<p:growl id="messages" />
+
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+
+		
+		
+		<table bgcolor="white"  width="1221px"><tr><td>
+		<h:panelGrid columns="2" cellpadding="5" border="2" style="width: 100%">
+			<p:outputLabel  value="Name Surname :" />   
+           <p:inputText id="subject" value="#{selectedTicketBean.selectedTicket.subject}" required="true" /> 
+		
+			<p:outputLabel value="Department:" />
+			 		<p:selectOneMenu id="lab"
+				value="#{selectedTicketBean.selectedTicket.lab}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Lab" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.labNames}" />
+			</p:selectOneMenu>
+			
+				<p:outputLabel  value="Operation:" />
+	 		 		<p:selectOneMenu id="type"
+				value="#{selectedTicketBean.selectedTicket.type}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Operation" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.typeNames}" />
+			</p:selectOneMenu>
+			 
+			 
+
+     	    <p:outputLabel  value="Doctor:" />
+		 	<p:selectOneMenu id="priority"
+				value="#{selectedTicketBean.selectedTicket.priority}" style="width:250px"
+				update="">
+				<!-->p:ajax valueChangeListener="#{fileUploadManagedBean.handleOrderCodeChange}" update="loadType" /-->
+				<f:selectItem itemLabel="Select Priority" itemValue=""
+					noSelectionOption="true" />
+				<f:selectItems value="#{createTicketBean.prioNames}" />
+			</p:selectOneMenu>
+			
+			
+	
+		  <p:outputLabel  value="Create Date:" />
+		  <p:inputText id="crrdate" value="#{selectedTicketBean.selectedTicket.crdate}" disabled="true"/> 
+		  
+		  <p:outputLabel  value="Demanded Date:" />
+	  <p:inputText id="escprime" value="#{selectedTicketBean.selectedTicket.escprime}" disabled="true" /> 
+	  	  
+	
+		  	<p:outputLabel  value="Description"/>
+		  <p:inputTextarea id="desc" rows="6" cols="35" value="#{selectedTicketBean.selectedTicket.desc}" required="true" requiredMessage="Description is required." />
+			
+
+				</h:panelGrid>
+		</td></tr>
+	</table>	
+	
+	<p:dataTable var="buttons" value="emre">
+						<p:column>
+								
+								</p:column>
+								
+								<p:column headerText="">
+								
+								</p:column>
+
+
+								<p:column headerText="">
+									<p:growl id="growl" life="2000" />
+								<p:commandButton value="Update"  update="growl" actionListener="#{selectedTicketBean.updateTicket}" styleClass="ui-priority-primary" />		
+									
+							<p:commandButton id="showDialogButtontwo" type="button" actionListener="#{selectedTicketBean.assignTicket}"
+									value="Assign" onclick="PF('dlg2').show()" />
+		
+								</p:column>
+					
+					</p:dataTable>
+					
+						<p:dialog header="Assign" widgetVar="dlg2"
+					appendToBody="true" resizable="false">
+					<h:form id="form">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px">
+							<h:outputLabel for="assign" value="Assignee:" />
+							 <p:inputText id="assign" value="#{selectedTicketBean.selectedTicket.assign}" /> 
+							
+							<h:outputLabel for="frdate" value="Forecast Date:" />
+							  <p:inputText id="frdate" value="#{selectedTicketBean.selectedTicket.frdate}"  /> 
+							
+							
+							<h:outputLabel for="esc_prime" value="Escalation Prime: " />						 
+						 <p:autoComplete id="esc_prime" value="#{selectedTicketBean.selectedTicket.escprime}" completeMethod="#{autoCompleteView.completeTheme}"/>
+                        
+						 
+						 
+						</h:panelGrid>
+						
+						
+
+						<p:commandButton value="Assign" actionListener="#{selectedTicketBean.assignTicket}" oncomplete="PF('dlg').hide();" />
+
+					</h:form>
+				</p:dialog>
+				
+		
+	
+	<br>
+	
+	<table width="1220px" height="20px"><tr><td>
+	<p:dataScroller value="#{selectedTicketBean.selectedTicket}" var="ticket" chunkSize="10">
+	
+        <f:facet name="header">
+        	<div align="left">
+          Comments
+          </div>
+        </f:facet>
+
+ 
+        <h:panelGrid   columns="2" style="height:0px;">
+           <img src="../images/usersmall.png"></img>
+            <p:outputPanel>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputText value="User Name:" />
+                    <h:outputText value="user" style="font-weight: bold"/>
+                   
+                	 <h:outputText value="Comment:" />
+                    <h:outputText value="#{selectedTicketBean.selectedTicket.comment}" style="font-weight: bold"/>
+                    
+                    
+                    
+                	 <h:outputText value="Date:" />
+                    <h:outputText value="#{selectedTicketBean.selectedTicket.crdate}" style="font-weight: bold"/>
+                    
+                </h:panelGrid>
+            </p:outputPanel>
+             
+        </h:panelGrid>
+             <p:separator />
+    </p:dataScroller>
+	</td></tr></table>
+  </br>
+
+	
+	
+	</h:form>
+	<h:form>
+	
+	<table bgcolor="116CBC"  width="1220px" ><tr><td>
+		<p:growl id="growl" life="2000" />
+		<h:panelGrid columns="3" cellpadding="1" border="2" style="width: 100%;">
+		
+		  <p:inputTextarea rows="6" cols="117" placeholder="Comment here." value="#{selectedTicketBean.insertcomment}" required="true"/>
+	      <p:commandButton value="Add Comment"  update="emre" actionListener="#{selectedTicketBean.createComment}" styleClass="ui-priority-primary" />
+		
+
+	</h:panelGrid>
+		</td></tr>
+	</table>	
+	
+	
+	
+	</h:form>
+
+<br>
+		<h:form id="fileUpoad" prependId="false"     enctype="multipart/form-data">
+ 
+ <p:panelGrid>
+      
+     <p:column > <div align="left" style="font-family: sans-serif; color: white;">Attachments </div></p:column>
+     
+     <p:column>
+ 
+            <p:fileUpload id="fileIdPhoto"  fileUploadListener="#{fileUploadBean.uploadPhoto}" mode="advanced" dragDropSupport="false"
+             multiple="true" update="messages" sizeLimit="10000000" fileLimit="3" allowTypes="/(\.|\/)(xlsx|jpe?g|zip)$/"  />
+ 
+              <p:messages id="messages" autoUpdate="true" closable="true" />
+ 
+              <p:separator/>
+       </p:column>    
+       
+       
+              
+  </p:panelGrid>
+ 
+ 
+</h:form>  
+	
+</br>	
+
+</body>
+</h:body>
+</html>

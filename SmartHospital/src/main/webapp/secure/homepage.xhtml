@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+
+	>
+
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Hospital Management Project</title>
+
+</h:head>
+
+<header>
+
+    <style type="text/css">
+           .blueTab {
+  background: #ffffff;
+
+  color: #00e4e6;
+  
+}
+
+	 .allTab {
+  background: #46b9b9;
+
+  color: white;
+   
+}
+
+.ticketTable{   
+   border-collapse:collapse;
+   border:2px solid #000000;
+
+}
+
+
+
+        </style>
+
+	<img src="../images/newbanner.png"></img>
+
+
+</header>
+
+
+<h:body>
+
+	<body background="../images/bgcol.png">
+		<h:form id="homePageForm">
+		
+
+		
+
+
+			<p:menubar>
+				<p:menuitem value="Home" style="margin-right:30px"
+					url="/secure/homepage.html#" />
+				<p:submenu label="Admin Panel" icon="ui-icon-contact">
+            <p:menuitem value="Doctor Operation" url="/secure/doctor.html#" icon="ui-icon-circle-zoomin" />
+            <p:separator />
+      
+            <p:menuitem value="Department Operation" url="/secure/department.html#" icon="ui-icon-circle-zoomin"  />
+            <p:separator />
+
+        </p:submenu>
+				<p:menuitem value="Timesheet" style="margin-right:30px" url="/secure/timesheet.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Doctor List" style="margin-right:30px" url="doctorlist.html" icon="ui-icon-calendar" />
+				<p:menuitem value="Create" style="color:#33cccc;"
+					url="/secure/createTicket.html" icon="ui-icon-plus" />
+
+
+
+				<f:facet name="options">
+
+
+					<p:inputText style="margin-right:10px" placeholder="Search" />
+					<p:commandButton type="button" value="Logout"
+						onclick="window.open('http://localhost:8080/LabTicket/login.html','_self')"
+						icon="ui-icon-extlink" />
+				</f:facet>
+			</p:menubar>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" />
+
+ 
+			<p:accordionPanel id="homePageAccordionPanel" multiple="true" activeIndex="0" tableStyle="width:auto" >
+
+			
+				
+				
+				
+				
+					<p:tab id="myTicketsTab" title="All Appointments"  titleStyleClass="allTab">
+	
+					  <p:growl id="msgs" showDetail="true" autoUpdate="true" />
+					
+			
+						<p:dataTable id="myDataTable"  var="ticket" value="#{homePageBean.allTickets}"
+							widgetVar="ticketsTable"
+							emptyMessage="No Tickets found with given criteria"
+							filteredValue="#{homePageBean.filteredTickets}"
+							tableStyle="width:auto"
+							styleClass="ticketTable"
+							
+							>
+												
+							<f:facet name="header">
+								<div align="right"  style="font-family: sans-serif; color: #10787F;">
+								
+								
+									<p:outputPanel autoUpdate="true">
+										
+										<h:outputText value="Search all fields:" />
+										<p:inputText id="globalFilter"
+											onkeyup="PF('ticketsTable').filter()" style="width:150px"
+											placeholder="Enter keyword" />
+										
+									
+									</p:outputPanel>
+	
+						
+								</div>
+								
+								
+							</f:facet>
+							
+							
+						
+								<f:facet name="header">
+								<div align="left" style="font-family: sans-serif; color: #10787F;">
+								<p:separator/>
+								
+								
+									Total Case:	[#{fn:length(homePageBean.allTickets)}]  &#160;&#160; | &#160;&#160;
+					
+								</div>
+								
+							</f:facet>
+				
+							
+
+							<p:column id="caseid" headerText="Patient ID" filterBy="#{ticket.id}" sortBy="#{ticket.id}"
+								filterMatchMode="contains" style="text-align:center;">
+								
+
+							<p:commandButton action="ticketDetails" value="#{ticket.id}">
+							<f:setPropertyActionListener target="#{selectedTicketBean.selectedTicket}" value="#{ticket}" />
+							</p:commandButton>
+
+							</p:column>
+							
+								<p:column filterBy="#{ticket.subject}" headerText="Name Surname"
+								filterMatchMode="contains">
+								
+					
+								<h:outputText value="#{ticket.subject}" />
+							</p:column>
+							
+							
+								<p:column headerText="Contact">
+								<h:outputText value="emre.ova@gmail.com" />
+							</p:column>
+					
+
+
+							<p:column filterBy="#{ticket.lab}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Department"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.labNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.lab}" />
+							</p:column>
+							
+							
+							<p:column filterBy="#{ticket.priority}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Doctor"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.prioNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.priority}" />
+							</p:column>
+					
+						
+
+							<p:column filterBy="#{ticket.type}" filterMatchMode="in">
+								<f:facet name="filter">
+									<p:selectCheckboxMenu label="Operation"
+										onchange="PF('ticketsTable').filter()"
+										panelStyle="width:125px" scrollHeight="150">
+										<f:selectItems value="#{homePageBean.typeNamesFiltretion}" />
+									</p:selectCheckboxMenu>
+								</f:facet>
+								<h:outputText value="#{ticket.type}" />
+								
+									
+							
+							
+							</p:column>
+
+								
+							<p:column headerText="Healthcare Organization">
+								<h:outputText value="SSK" />
+							</p:column>
+					
+						
+
+
+							
+							<p:column headerText="Entry Date" sortBy="#{ticket.crdate}">
+								<h:outputText value="#{ticket.crdate}" />
+							</p:column>
+
+						
+
+					
+
+							<p:column headerText="Exit Date" sortBy="#{ticket.closedate}">
+								<h:outputText value="#{ticket.closedate}" />
+							</p:column>
+							
+						
+    
+        	
+     <!--   		<p:column visible="true"  >
+							
+								 <p:inputText id="firstname" type="hidden">
+            <p:ajax event="keyup" update="form2"/>
+        </p:inputText>
+        
+                <h:outputText id="form2" value="#{fn:length(homePageBean.filteredTickets)}" />
+              
+      
+				
+              
+        	</p:column>  --> 
+        	
+       
+							<f:facet name="footer">
+						
+							
+								<div align="left" id="emree">
+				
+						
+					<h:outputText id="myTicketsTotalid" value="Filtered Appointments:	#{fn:length(homePageBean.filteredTickets)}"/>  &#160;&#160;		
+								</div>
+							<p:separator />
+								<div align="right">
+								
+												  <h:commandLink>
+												  Download as Excel file:
+       					<img src="../images/excel.png"></img>
+      					  <p:dataExporter type="xls" target="tablee" fileName="tickets" pageOnly="true" />
+   						 </h:commandLink>
+   						  &#160;&#160;
+   						
+   									
+								</div>
+						
+							</f:facet>
+							
+			
+				
+		
+						</p:dataTable>
+						
+
+				
+					</p:tab>
+
+			</p:accordionPanel>
+			
+					
+	
+
+			<br>
+			<footer align="center">
+				<p style="color: white">
+					<br>© Copyright 2016 by Smart Hospital</br>
+				</p>
+			</footer>
+			</br>
+			
+					
+		
+		
+
+		</h:form>
+	
+
+
+	</body>
+</h:body>
+
+
+</html>
